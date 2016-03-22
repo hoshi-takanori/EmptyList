@@ -18,8 +18,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SwipeRefreshLayout mSwipeRefresh;
+    private SwipeRefreshEmptyLayout mSwipeRefresh;
     private ListView mListView;
+    private View mEmptyView;
 
     private MyListAdapter mListAdapter;
     private List<String> mListData;
@@ -29,11 +30,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mSwipeRefresh = (SwipeRefreshEmptyLayout) findViewById(R.id.swipe_refresh);
         mListView = (ListView) findViewById(R.id.list_view);
+        mEmptyView = findViewById(R.id.empty_view);
+
+        mListView.addHeaderView(getLayoutInflater().inflate(R.layout.list_header, mListView, false));
+        mListView.setEmptyView(mEmptyView);
         mListAdapter = new MyListAdapter();
         mListView.setAdapter(mListAdapter);
 
-        mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+        mSwipeRefresh.setViews(mListView, mEmptyView);
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
